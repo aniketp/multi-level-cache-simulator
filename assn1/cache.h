@@ -20,7 +20,10 @@ class Cache {
     ~Cache() = default;
 
     // Retrieve block from memory on miss.
-    void add_on_miss(int address);
+    int add_block(int address);
+    
+    // check hit or miss for req. address
+    bool check_hit_or_miss(int address);
     
     // Evict victim block from cache.
     void invalidate_block(int address);
