@@ -36,8 +36,8 @@ int Cache::add_block(int address) {
         return address;
     }
     abort(); // Something bad happened
-    //return evcted address
 }
+
 bool Cache::check_hit_or_miss(int address){
     int set_num = (int) address/num_sets_;
     for (auto &block : matrix_.at(set_num)) {
@@ -46,6 +46,7 @@ bool Cache::check_hit_or_miss(int address){
     }
     return false;
 }
+
 void Cache::invalidate_block(int address) {
     int set_num = (int) address/num_sets_;
     for (auto &block : matrix_.at(set_num)) {

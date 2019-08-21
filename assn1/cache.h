@@ -4,7 +4,7 @@
 #include <list>
 #include <vector>
 
-enum type {L1Cache, L2Cache};
+enum type {L2Cache, L3Cache};
 
 struct cell {
     bool present;	// Valid bit
@@ -22,7 +22,7 @@ class Cache {
     // Retrieve block from memory on miss.
     int add_block(int address);
     
-    // check hit or miss for req. address
+    // Check hit or miss for req. address
     bool check_hit_or_miss(int address);
     
     // Evict victim block from cache.
@@ -30,6 +30,10 @@ class Cache {
 
     // Update LRU table on cache hit.
     void update_on_hit(int address);
+
+    // Count of hits and misses
+    int hits;
+    int misses;
 
   private:
     // Cache Heirarchy (L1 or L2).
