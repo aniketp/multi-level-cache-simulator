@@ -5,7 +5,6 @@ int main() {
     Cache l3(L3Cache, 16, 1024);
 
     int type, addr, evicted;
-    int hits, misses;
 
     if (l2.check_hit_or_miss(addr)) {
         l2.hits++;

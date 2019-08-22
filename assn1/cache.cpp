@@ -38,7 +38,7 @@ int Cache::add_block(int address) {
     abort(); // Something bad happened
 }
 
-bool Cache::check_hit_or_miss(int address){
+bool Cache::check_hit_or_miss(int address) {
     int set_num = (int) address/num_sets_;
     for (auto &block : matrix_.at(set_num)) {
         if (block.address != address) continue;
