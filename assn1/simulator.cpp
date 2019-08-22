@@ -28,7 +28,7 @@ void inclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int addr) {
     }
 }
 
-int exclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int addr) {
+void exclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int addr) {
     int evicted;
     if (l2->check_hit_or_miss(addr)) {
         (l2->hits)++;
@@ -96,6 +96,32 @@ int main() {
         while (getline(tracestrm, line)) {
             stringstream line_(line);
             line_ >> type >> address;
+            // L1 cache missed, forward it to lower levels
+            if (type) {
+                inclusive(l2Incl, l3Incl, address);
+                exclusive(l2Excl, l3Excl, address);
+                nine(l2Nine, l3Nine, address);
+            }
         }
+
+        // TODO: Prettify this, once the simulator works properly
+        cout << "------------ " <<  tracefile.path().filename().string()
+             << " ------------";
+        cout << "\n INCLUSIVE  | L2 Hits:   " << l2Incl->hits;
+        cout << "\n INCLUSIVE  | L2 Misses: " << l2Incl->misses;
+        cout << "\n INCLUSIVE  | L3 Hits:   " << l3Incl->hits;
+        cout << "\n INCLUSIVE  | L3 Misses: " << l3Incl->misses;
+        cout << "\n";
+        cout << "\n EXCLUSIVE  | L2 Hits:   " << l2Incl->hits;
+        cout << "\n EXCLUSIVE  | L2 Misses: " << l2Incl->misses;
+        cout << "\n EXCLUSIVE  | L3 Hits:   " << l3Incl->hits;
+        cout << "\n EXCLUSIVE  | L3 Misses: " << l3Incl->misses;
+        cout << "\n";
+        cout << "\n Non-In/Ex  | L2 Hits:   " << l2Incl->hits;
+        cout << "\n Non-In/Ex  | L2 Misses: " << l2Incl->misses;
+        cout << "\n Non-In/Ex  | L3 Hits:   " << l3Incl->hits;
+        cout << "\n Non-In/Ex  | L3 Misses: " << l3Incl->misses;
+        cout << "\n";
     }
+    return 0;
 }
