@@ -70,8 +70,3 @@ void Cache::update_on_hit(int address) {
     lru_set_.at(set_num).push_front(address);
     return;
 }
-
-int main() {
-    Cache l1(L1Cache, 1024, 8);
-    return 0;
-}

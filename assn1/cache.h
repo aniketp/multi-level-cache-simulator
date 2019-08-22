@@ -2,6 +2,7 @@
 #define _CACHE_H_
 
 #include <list>
+#include <memory>
 #include <vector>
 
 enum type {L2Cache, L3Cache};
@@ -13,6 +14,8 @@ struct cell {
 
 class Cache {
   public:
+    typedef std::shared_ptr<Cache> Ptr;
+
     // ctor
     Cache(type level, int num_sets, int num_ways);
 

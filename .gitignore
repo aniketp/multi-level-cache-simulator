@@ -1,6 +1,6 @@
 .vscode
-cache
 read_traces
+simulator
 
 # Directories
 output
