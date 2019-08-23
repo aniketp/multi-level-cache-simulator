@@ -42,7 +42,7 @@ class Cache {
     void update_on_hit(int_t address);
 
     // Count of hits and misses
-    int_t hits, misses;
+    int_t hits = 0, misses = 0;
 
   private:
     // Cache Heirarchy (L1 or L2).
@@ -91,7 +91,7 @@ int Cache::add_block(int_t address) {
         // Found the block to be evicted
         block.address = address;
         lru_set_.at(set_num).push_front(address);
-        return address;
+        return evict_block;
     }
     abort(); // Something bad happened
 }
