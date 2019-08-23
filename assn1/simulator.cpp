@@ -211,11 +211,11 @@ int main() {
         // Create shared pointers to the cache hierarchy for all
         // different inclusion/exclusion policies.
         Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
-        Cache::Ptr l3Incl = make_shared<Cache>(L3Cache, 1024, 16);
+        Cache::Ptr l3Incl = make_shared<Cache>(L3Cache, 2048, 16);
         Cache::Ptr l2Excl = make_shared<Cache>(L2Cache, 1024, 8);
-        Cache::Ptr l3Excl = make_shared<Cache>(L3Cache, 1024, 16);
+        Cache::Ptr l3Excl = make_shared<Cache>(L3Cache, 2048, 16);
         Cache::Ptr l2Nine = make_shared<Cache>(L2Cache, 1024, 8);
-        Cache::Ptr l3Nine = make_shared<Cache>(L3Cache, 1024, 16);
+        Cache::Ptr l3Nine = make_shared<Cache>(L3Cache, 2048, 16);
 
         // Read through the traces and simlulate above declared caches
         // through the corresponding trace.
