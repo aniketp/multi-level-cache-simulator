@@ -110,22 +110,16 @@ void Cache::invalidate_block(int_t address) {
         if (block.address != address) continue;
         // Found the block; Invalidate it
         block.present = false;
-        auto index = find(lru_set_.at(set_num).begin(),
-                        lru_set_.at(set_num).end(), address);
-        lru_set_.at(set_num).erase(index);
-        // lru_set_.at(set_num).remove(address);
+        lru_set_.at(set_num).remove(address);
         return;
     }
-    //cout << "lol\n";
-    //abort(); // Something bad happened
+    abort(); // Something bad happened
 }
 
 void Cache::update_on_hit(int_t address) {
     int set_num = (int) address % num_sets_;
     // Move the block to the top of LRU set
-    auto index = find(lru_set_.at(set_num).begin(),
-                        lru_set_.at(set_num).end(), address);
-    lru_set_.at(set_num).erase(index);
+    lru_set_.at(set_num).remove(address);
     lru_set_.at(set_num).push_front(address);
     return;
 }
@@ -146,7 +140,7 @@ void inclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
         } else {
             (l3->misses)++;
             evicted = l3->add_block(addr);
-            if (evicted > 0)
+            if (evicted && l2->check_hit_or_miss(evicted))
                 l2->invalidate_block(evicted);
             l2->add_block(addr);
         }
