@@ -30,7 +30,7 @@ class Cache {
     ~Cache() = default;
 
     // Retrieve block from memory on miss.
-    int add_block(int_t address);
+    int_t add_block(int_t address);
     
     // Check hit or miss for req. address
     bool check_hit_or_miss(int_t address);
@@ -71,7 +71,7 @@ Cache::Cache(type level, int num_sets, int num_ways)
     lru_set_.resize(num_sets);
 };
 
-int Cache::add_block(int_t address) {
+int_t Cache::add_block(int_t address) {
     int set_num = (int) address % num_sets_;
     // Check if a way is free in the set
     for (auto &set : matrix_.at(set_num)) {
@@ -113,6 +113,7 @@ void Cache::invalidate_block(int_t address) {
         auto index = find(lru_set_.at(set_num).begin(),
                         lru_set_.at(set_num).end(), address);
         lru_set_.at(set_num).erase(index);
+        // lru_set_.at(set_num).remove(address);
         return;
     }
     //cout << "lol\n";
@@ -199,15 +200,6 @@ void nine(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
 }
 
 int main() {
-    // Create shared pointers to the cache hierarchy for all
-    // different inclusion/exclusion policies.
-    Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
-    Cache::Ptr l3Incl = make_shared<Cache>(L3Cache, 1024, 16);
-    Cache::Ptr l2Excl = make_shared<Cache>(L2Cache, 1024, 8);
-    Cache::Ptr l3Excl = make_shared<Cache>(L3Cache, 1024, 16);
-    Cache::Ptr l2Nine = make_shared<Cache>(L2Cache, 1024, 8);
-    Cache::Ptr l3Nine = make_shared<Cache>(L3Cache, 1024, 16);
-
     int_t type, address;
     string line, folder = "output";
     for (const auto& tracefile : fs::directory_iterator(folder)) {
@@ -215,6 +207,16 @@ int main() {
         if (!tracestrm.is_open())
             cerr << "Tracefile " << tracefile.path().filename().string()
                  << " could not be opened\n";
+
+        // Create shared pointers to the cache hierarchy for all
+        // different inclusion/exclusion policies.
+        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
+        Cache::Ptr l3Incl = make_shared<Cache>(L3Cache, 1024, 16);
+        Cache::Ptr l2Excl = make_shared<Cache>(L2Cache, 1024, 8);
+        Cache::Ptr l3Excl = make_shared<Cache>(L3Cache, 1024, 16);
+        Cache::Ptr l2Nine = make_shared<Cache>(L2Cache, 1024, 8);
+        Cache::Ptr l3Nine = make_shared<Cache>(L3Cache, 1024, 16);
+
         // Read through the traces and simlulate above declared caches
         // through the corresponding trace.
         cout << "Processing file " << tracefile.path().filename().string()
@@ -222,7 +224,6 @@ int main() {
         while (getline(tracestrm, line)) {
             stringstream line_(line);
             line_ >> type >> address;
-            //cout << "Read entry " << address << endl;
             // L1 cache missed, forward it to lower levels
             if (type) {
                 inclusive(l2Incl, l3Incl, address);
