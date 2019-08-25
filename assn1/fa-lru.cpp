@@ -93,14 +93,14 @@ int_t Cache::add_block(int_t address) {
         lru_set_.at(set_num).push_front(address);
         return evict_block;
     }
-    cout << "lol\n";
-    // abort(); // Something bad happened
+    abort(); // Something bad happened
 }
 
 bool Cache::check_hit_or_miss(int_t address) {
     int set_num = (int) address % num_sets_;
     for (auto &block : matrix_.at(set_num)) {
-        if (block.address == address) return true;
+        if ((block.address == address) && (block.present))
+            return true;
     }
     return false;
 }
@@ -178,7 +178,7 @@ int main() {
         cout << "\n INCLUSIVE  | L2 Misses: " << l2Incl->misses;
         cout << "\n INCLUSIVE  | L3 Hits:   " << l3Incl->hits;
         cout << "\n INCLUSIVE  | L3 Misses: " << l3Incl->misses;
-        // cout << "\n";
+        cout << "\n";
     }
     return 0;
 }

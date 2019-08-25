@@ -1,6 +1,7 @@
 .vscode
 read_traces
 simulator
+fa-lru
 
 # Directories
 output

@@ -99,7 +99,8 @@ int_t Cache::add_block(int_t address) {
 bool Cache::check_hit_or_miss(int_t address) {
     int set_num = (int) address % num_sets_;
     for (auto &block : matrix_.at(set_num)) {
-        if (block.address == address) return true;
+        if ((block.address == address) && block.present)
+            return true;
     }
     return false;
 }
