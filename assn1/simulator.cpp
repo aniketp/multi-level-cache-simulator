@@ -170,7 +170,6 @@ void exclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
 }
 
 void nine(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
-    int_t evicted;
     if (l2->check_hit_or_miss(addr)) {
         (l2->hits)++;
         l2->update_on_hit(addr);
