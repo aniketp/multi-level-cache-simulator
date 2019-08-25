@@ -143,7 +143,6 @@ void inclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
             if (evicted && l2->check_hit_or_miss(evicted))
                 l2->invalidate_block(evicted);
             l2->add_block(addr);
-            (l2->hits)++;
         }
     }
 }
@@ -166,7 +165,6 @@ void exclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
             evicted = l2->add_block(addr);
             if (evicted > 0)
                 l3->add_block(evicted);
-            (l2->hits)++;
         }
     }
 }
@@ -181,16 +179,11 @@ void nine(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
         if (l3->check_hit_or_miss(addr)) {
             (l3->hits)++;
             l3->update_on_hit(addr);
-            evicted = l2->add_block(addr);
-            if (!l3->check_hit_or_miss(evicted))
-                l3->add_block(evicted);
+            l2->add_block(addr);
         } else {
             (l3->misses)++;
             l3->add_block(addr);    
-            evicted = l2->add_block(addr);
-            if (!l3->check_hit_or_miss(evicted))
-                l3->add_block(evicted);
-            (l2->hits)++;
+            l2->add_block(addr);
         }
     }
 }
