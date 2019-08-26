@@ -21,4 +21,4 @@ run: ./output $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -rf output read_traces simulator
+	rm -rf output read_traces simulator fa-lru fa-min
