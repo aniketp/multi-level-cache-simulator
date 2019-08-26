@@ -1,38 +1,27 @@
 #ifndef _CACHE_MIN_H_
 #define _CACHE_MIN_H_
 
-#include <memory>
-#include <vector>
-
-typedef unsigned long long int_t;
-enum type {L2Cache, L3Cache};
-
-struct cell {
-    bool present;	// Valid bit
-    int_t address;	// Memory address
-};
+#include "cache.h"
 
 class CacheMin {
   public:
     typedef std::shared_ptr<CacheMin> Ptr;
 
     // ctor
-    CacheMin(type level, int num_sets, int num_ways);
+    CacheMin(type level, int num_sets, int num_ways,
+            std::vector<int_t>& min_set);
 
     // dtor
     ~CacheMin() = default;
 
     // Retrieve block from memory on miss.
-    int_t add_block(int_t address);
+    int_t add_block(int_t address, int index);
     
     // Check hit or miss for req. address
     bool check_hit_or_miss(int_t address);
     
     // Evict victim block from cache.
     void invalidate_block(int_t address);
-
-    // Update LRU table on cache hit.
-    void update_on_hit(int_t address);
 
     // Count of hits and misses
     int_t hits = 0, misses = 0;

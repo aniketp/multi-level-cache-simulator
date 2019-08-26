@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <utility>
 #include "cache-min.h"
 using namespace std;
@@ -23,7 +24,21 @@ int_t CacheMin::add_block(int_t address, int index) {
         return 0;
     }
     // All 'ways' in the set are valid, evict one
-    // TODO
+    int_t max_dist = 0, evict_block = 0;
+    for (auto &block : matrix_.at(set_num)) {
+        auto itr = find(min_set_.begin() + index,
+                    min_set_.end(), block.address);
+        int_t pos = distance(min_set_.begin(), itr);
+        // This element is farther, update max_dist.
+        if (pos > max_dist) {
+            max_dist = pos;
+            evict_block = &block - &matrix_.at(set_num)[0];
+        }
+    }
+    // Replace the farthest block with the current
+    cell victim = matrix_.at(set_num)[evict_block];
+    matrix_.at(set_num)[evict_block].address = address;
+    return victim.address;
 }
 
 bool CacheMin::check_hit_or_miss(int_t address) {
@@ -44,9 +59,4 @@ void CacheMin::invalidate_block(int_t address) {
         return;
     }
     abort(); // Something bad happened
-}
-
-void CacheMin::update_on_hit(int_t address) {
-    // Deprecated for MIN policy
-    return;
 }

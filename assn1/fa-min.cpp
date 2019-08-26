@@ -3,14 +3,13 @@
 #include <fstream>
 #include <sstream>
 
-#include "cache.h"
 #include "cache-min.h"
 
 using namespace std;
 namespace fs = std::experimental::filesystem;
 
 
-void inclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr,
+void inclusive(shared_ptr<Cache> l2, shared_ptr<CacheMin> l3, int_t addr,
                 int index) {
     int_t evicted;
     if (l2->check_hit_or_miss(addr)) {
@@ -20,7 +19,6 @@ void inclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr,
         (l2->misses)++;
         if (l3->check_hit_or_miss(addr)) {
             (l3->hits)++;
-            l3->update_on_hit(addr);
             l2->add_block(addr);
         } else {
             (l3->misses)++;
@@ -53,16 +51,21 @@ int main() {
             cerr << "Tracefile " << tracefile.path().filename().string()
                  << " could not be opened\n";
 
+        // Preprocess tracefile; For Belady's MIN algorithm.
         vector <int_t> min_set;
+        ifstream prestrm (tracefile.path());
+        preprocess(prestrm, min_set);
+        prestrm.close();
+
         Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
-        CacheMin::Ptr l3Incl = make_shared<Cache>(L3Cache, 1, 32768, min_set);
+        CacheMin::Ptr l3Incl =
+                make_shared<CacheMin>(L3Cache, 1, 32768, min_set);
 
         // Read through the traces and simlulate above declared caches
         // through the corresponding trace.
         cout << "Processing file " << tracefile.path().filename().string()
              << endl;
         int index = 0;
-        preprocess(tracestrm, min_set);
         while (getline(tracestrm, line)) {
             stringstream line_(line);
             line_ >> type >> address;

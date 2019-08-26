@@ -2,6 +2,7 @@
 read_traces
 simulator
 fa-lru
+fa-min
 
 # Directories
 output
