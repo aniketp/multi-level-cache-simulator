@@ -1,6 +1,8 @@
 #ifndef _CACHE_MIN_H_
 #define _CACHE_MIN_H_
 
+#include <fstream>
+#include <map>
 #include "cache.h"
 
 class CacheMin {
@@ -8,8 +10,7 @@ class CacheMin {
     typedef std::shared_ptr<CacheMin> Ptr;
 
     // ctor
-    CacheMin(type level, int num_sets, int num_ways,
-            std::vector<int_t>& min_set);
+    CacheMin(type level, int num_sets, int num_ways);
 
     // dtor
     ~CacheMin() = default;
@@ -22,6 +23,9 @@ class CacheMin {
     
     // Evict victim block from cache.
     void invalidate_block(int_t address);
+
+    // Preprocess tracefile; For Belady's MIN.
+    int preprocess(std::ifstream& tracestrm);
 
     // Count of hits and misses
     int_t hits = 0, misses = 0;
@@ -40,7 +44,7 @@ class CacheMin {
     std::vector <std::vector <cell> > matrix_;
 
     // Instructions for Belady's optimal policy
-    std::vector <int_t> min_set_;
+    std::map <int_t, std::vector <int> > min_set_;
 };
 
 # endif  // _CACHE_MIN_H_

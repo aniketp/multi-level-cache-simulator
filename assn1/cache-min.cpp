@@ -1,14 +1,13 @@
 #include <algorithm>
+#include <sstream>
 #include <utility>
 #include "cache-min.h"
 using namespace std;
 
-CacheMin::CacheMin(type level, int num_sets, int num_ways,
-                    vector<int_t>& min_set)
+CacheMin::CacheMin(type level, int num_sets, int num_ways)
             : level_(move(level)),
               num_sets_(move(num_sets)),
-              num_ways_(move(num_ways)),
-              min_set_(move(min_set)) {
+              num_ways_(move(num_ways)) {
     // Create a 2d array for the cache
     matrix_.resize(num_sets, vector <cell>(num_ways));
 };
@@ -24,14 +23,13 @@ int_t CacheMin::add_block(int_t address, int index) {
         return 0;
     }
     // All 'ways' in the set are valid, evict one
-    int_t max_dist = 0, evict_block = 0;
+    int max_dist = 0, evict_block = 0;
     for (auto &block : matrix_.at(set_num)) {
-        auto itr = find(min_set_.begin() + index,
-                    min_set_.end(), block.address);
-        int_t pos = distance(min_set_.begin(), itr);
-        // This element is farther, update max_dist.
-        if (pos > max_dist) {
-            max_dist = pos;
+        while (index >= min_set_[block.address].front())
+            min_set_[block.address].erase(min_set_[block.address].begin());
+        // All addresses before index have been deleted.
+        if (max_dist < min_set_[block.address].front() - index) {
+            max_dist = min_set_[block.address].front() - index;
             evict_block = &block - &matrix_.at(set_num)[0];
         }
     }
@@ -59,4 +57,18 @@ void CacheMin::invalidate_block(int_t address) {
         return;
     }
     abort(); // Something bad happened
+}
+
+// Process instructions in the trace file and store within a set
+// for later use in Belady's Optimal Cache replacement policy.
+int CacheMin::preprocess(ifstream& tracestrm) {
+    int_t type, address;
+    int index = 0;
+    string line;
+    while (getline(tracestrm, line)) {
+        stringstream line_(line);
+        line_ >> type >> address;
+        if (type) min_set_[address].emplace_back(index++);
+    }
+    return index;
 }

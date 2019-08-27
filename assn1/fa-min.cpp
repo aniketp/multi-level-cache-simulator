@@ -1,13 +1,11 @@
 #include <experimental/filesystem>
 #include <iostream>
-#include <fstream>
 #include <sstream>
 
 #include "cache-min.h"
 
 using namespace std;
 namespace fs = std::experimental::filesystem;
-
 
 void inclusive(shared_ptr<Cache> l2, shared_ptr<CacheMin> l3, int_t addr,
                 int index) {
@@ -30,18 +28,6 @@ void inclusive(shared_ptr<Cache> l2, shared_ptr<CacheMin> l3, int_t addr,
     }
 }
 
-// Process instructions in the trace file and store within a set
-// for later use in Belady's Optimal Cache replacement policy.
-void preprocess(ifstream& tracestrm, vector <int_t>& min_set) {
-    int_t type, address;
-    string line;
-    while (getline(tracestrm, line)) {
-        stringstream line_(line);
-        line_ >> type >> address;
-        if (type) min_set.emplace_back(address);
-    }
-}
-
 int main() {
     int_t type, address;
     string line, folder = "output";
@@ -51,20 +37,19 @@ int main() {
             cerr << "Tracefile " << tracefile.path().filename().string()
                  << " could not be opened\n";
 
-        // Preprocess tracefile; For Belady's MIN algorithm.
-        vector <int_t> min_set;
-        ifstream prestrm (tracefile.path());
-        preprocess(prestrm, min_set);
-        prestrm.close();
-
-        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
-        CacheMin::Ptr l3Incl =
-                make_shared<CacheMin>(L3Cache, 1, 32768, min_set);
-
         // Read through the traces and simlulate above declared caches
         // through the corresponding trace.
         cout << "Processing file " << tracefile.path().filename().string()
              << endl;
+        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
+        CacheMin::Ptr l3Incl =
+                make_shared<CacheMin>(L3Cache, 1, 32768);
+        // Preprocess tracefile; For Belady's MIN algorithm.
+        ifstream prestrm (tracefile.path());
+        int entries = l3Incl->preprocess(prestrm);
+        cout << entries << " entries read.\n";
+        prestrm.close();
+
         int index = 0;
         while (getline(tracestrm, line)) {
             stringstream line_(line);
