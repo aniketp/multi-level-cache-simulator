@@ -24,16 +24,25 @@ int_t CacheMin::add_block(int_t address, int index) {
     }
     // All 'ways' in the set are valid, evict one
     int max_dist = 0, evict_block = 0;
-    for (auto &block : matrix_.at(set_num)) {
-        while (index >= min_set_[block.address].front())
+    for (int_t i = 0; i < matrix_.at(set_num).size(); ++i) {
+        auto block = matrix_.at(set_num)[i];
+        // Make sure there are elements in min_set_[block.address].
+        while (min_set_[block.address].size() &&
+                (index >= min_set_[block.address].front())) {
             min_set_[block.address].erase(min_set_[block.address].begin());
+        }
+        // If there is no access for this block in the future, return it.
+        if (min_set_[block.address].empty()) {
+            evict_block = i;
+            break;
+        }
         // All addresses before index have been deleted.
         if (max_dist < min_set_[block.address].front() - index) {
             max_dist = min_set_[block.address].front() - index;
-            evict_block = &block - &matrix_.at(set_num)[0];
+            evict_block = i;
         }
     }
-    // Replace the farthest block with the current
+    // Replace the farthest block with the current one.
     cell victim = matrix_.at(set_num)[evict_block];
     matrix_.at(set_num)[evict_block].address = address;
     return victim.address;
