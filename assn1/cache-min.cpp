@@ -13,7 +13,7 @@ CacheMin::CacheMin(type level, int num_sets, int num_ways)
 };
 
 int_t CacheMin::add_block(int_t address, int index) {
-    int set_num = (int) address % num_sets_;
+    int set_num = (int) (address>>6) % num_sets_;
     // Check if a way is free in the set
     for (auto &set : matrix_.at(set_num)) {
         if (set.present) continue;
@@ -49,7 +49,7 @@ int_t CacheMin::add_block(int_t address, int index) {
 }
 
 bool CacheMin::check_hit_or_miss(int_t address) {
-    int set_num = (int) address % num_sets_;
+    int set_num = (int) (address>>6) % num_sets_;
     for (auto &block : matrix_.at(set_num)) {
         if ((block.address == address) && (block.present))
             return true;
@@ -58,7 +58,7 @@ bool CacheMin::check_hit_or_miss(int_t address) {
 }
 
 void CacheMin::invalidate_block(int_t address) {
-    int set_num = (int) address % num_sets_;
+    int set_num = (int) (address>>6) % num_sets_;
     for (auto &block : matrix_.at(set_num)) {
         if (block.address != address) continue;
         // Found the block; Invalidate it
