@@ -5,6 +5,14 @@
 #include <memory>
 #include <vector>
 
+#define BLOCK_OFFSET   6
+#define L2_WAY         8
+#define L3_WAY        16
+#define L2_SET      1024
+#define L3_SET      2048
+#define L3_FA_WAY  32768
+#define L3_FA_SET      1
+
 typedef unsigned long long int_t;
 enum type {L2Cache, L3Cache};
 

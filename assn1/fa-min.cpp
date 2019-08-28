@@ -41,9 +41,8 @@ int main() {
         // through the corresponding trace.
         cout << "Processing file " << tracefile.path().filename().string()
              << endl;
-        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
-        CacheMin::Ptr l3Incl =
-                make_shared<CacheMin>(L3Cache, 1, 32768);
+        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, L2_SET, L2_WAY);
+        CacheMin::Ptr l3Incl = make_shared<CacheMin>(L3Cache, L3_FA_WAY);
         // Preprocess tracefile; For Belady's MIN algorithm.
         ifstream prestrm (tracefile.path());
         int entries = l3Incl->preprocess(prestrm);
@@ -54,11 +53,10 @@ int main() {
         while (getline(tracestrm, line)) {
             stringstream line_(line);
             line_ >> type >> address;
-            // L1 cache missed, forward it to lower levels
+            // L1 cache missed, forward it to lower levels.
             if (type) inclusive(l2Incl, l3Incl, address, index++);
         }
 
-        // TODO: Prettify this, once the simulator works properly
         cout << "------------ " <<  tracefile.path().filename().string()
              << " ------------";
         cout << "\n INCLUSIVE  | L2 Hits:   " << l2Incl->hits;

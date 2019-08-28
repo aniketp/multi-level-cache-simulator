@@ -4,18 +4,16 @@
 #include "cache-min.h"
 using namespace std;
 
-CacheMin::CacheMin(type level, int num_sets, int num_ways)
+CacheMin::CacheMin(type level, int num_ways)
             : level_(move(level)),
-              num_sets_(move(num_sets)),
               num_ways_(move(num_ways)) {
     // Create a 2d array for the cache
-    matrix_.resize(num_sets, vector <cell>(num_ways));
+    matrix_.resize(L3_FA_WAY, vector <cell>(num_ways));
 };
 
 int_t CacheMin::add_block(int_t address, int index) {
-    int set_num = (int) (address>>6) % num_sets_;
     // Check if a way is free in the set
-    for (auto &set : matrix_.at(set_num)) {
+    for (auto &set : matrix_.at(0)) {
         if (set.present) continue;
         // Found an empty slot
         set.present = true;
@@ -24,8 +22,8 @@ int_t CacheMin::add_block(int_t address, int index) {
     }
     // All 'ways' in the set are valid, evict one
     int max_dist = 0, evict_block = 0;
-    for (int_t i = 0; i < matrix_.at(set_num).size(); ++i) {
-        auto block = matrix_.at(set_num)[i];
+    for (int_t i = 0; i < matrix_.at(0).size(); ++i) {
+        auto block = matrix_.at(0)[i];
         // Make sure there are elements in min_set_[block.address].
         while (min_set_[block.address].size() &&
                 (index >= min_set_[block.address].front())) {
@@ -43,14 +41,13 @@ int_t CacheMin::add_block(int_t address, int index) {
         }
     }
     // Replace the farthest block with the current one.
-    cell victim = matrix_.at(set_num)[evict_block];
-    matrix_.at(set_num)[evict_block].address = address;
+    cell victim = matrix_.at(0)[evict_block];
+    matrix_.at(0)[evict_block].address = address;
     return victim.address;
 }
 
 bool CacheMin::check_hit_or_miss(int_t address) {
-    int set_num = (int) (address>>6) % num_sets_;
-    for (auto &block : matrix_.at(set_num)) {
+    for (auto &block : matrix_.at(0)) {
         if ((block.address == address) && (block.present))
             return true;
     }
@@ -58,8 +55,7 @@ bool CacheMin::check_hit_or_miss(int_t address) {
 }
 
 void CacheMin::invalidate_block(int_t address) {
-    int set_num = (int) (address>>6) % num_sets_;
-    for (auto &block : matrix_.at(set_num)) {
+    for (auto &block : matrix_.at(0)) {
         if (block.address != address) continue;
         // Found the block; Invalidate it
         block.present = false;

@@ -38,8 +38,9 @@ int main() {
             cerr << "Tracefile " << tracefile.path().filename().string()
                  << " could not be opened\n";
 
-        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
-        Cache::Ptr l3Incl = make_shared<Cache>(L3Cache, 1, 32768);
+        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, L2_SET, L2_WAY);
+        Cache::Ptr l3Incl =
+                make_shared<Cache>(L3Cache, L3_FA_SET, L3_FA_WAY);
 
         // Read through the traces and simlulate above declared caches
         // through the corresponding trace.
@@ -52,7 +53,6 @@ int main() {
             if (type) inclusive(l2Incl, l3Incl, address);
         }
 
-        // TODO: Prettify this, once the simulator works properly
         cout << "------------ " <<  tracefile.path().filename().string()
              << " ------------";
         cout << "\n INCLUSIVE  | L2 Hits:   " << l2Incl->hits;

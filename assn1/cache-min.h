@@ -10,7 +10,7 @@ class CacheMin {
     typedef std::shared_ptr<CacheMin> Ptr;
 
     // ctor
-    CacheMin(type level, int num_sets, int num_ways);
+    CacheMin(type level, int num_ways);
 
     // dtor
     ~CacheMin() = default;
@@ -33,9 +33,6 @@ class CacheMin {
   private:
     // Cache Heirarchy (L1 or L2).
     type level_;
-
-    // Number of sets in the cache.
-    int num_sets_;
 
     // Number of ways in the cache.
     int num_ways_;

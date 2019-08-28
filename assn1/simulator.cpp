@@ -79,12 +79,12 @@ int main() {
 
         // Create shared pointers to the cache hierarchy for all
         // different inclusion/exclusion policies.
-        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, 1024, 8);
-        Cache::Ptr l3Incl = make_shared<Cache>(L3Cache, 2048, 16);
-        Cache::Ptr l2Excl = make_shared<Cache>(L2Cache, 1024, 8);
-        Cache::Ptr l3Excl = make_shared<Cache>(L3Cache, 2048, 16);
-        Cache::Ptr l2Nine = make_shared<Cache>(L2Cache, 1024, 8);
-        Cache::Ptr l3Nine = make_shared<Cache>(L3Cache, 2048, 16);
+        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, L2_SET, L2_WAY);
+        Cache::Ptr l3Incl = make_shared<Cache>(L3Cache, L3_SET, L3_WAY);
+        Cache::Ptr l2Excl = make_shared<Cache>(L2Cache, L2_SET, L2_WAY);
+        Cache::Ptr l3Excl = make_shared<Cache>(L3Cache, L3_SET, L3_WAY);
+        Cache::Ptr l2Nine = make_shared<Cache>(L2Cache, L2_SET, L2_WAY);
+        Cache::Ptr l3Nine = make_shared<Cache>(L3Cache, L3_SET, L3_WAY);
 
         // Read through the traces and simlulate above declared caches
         // through the corresponding trace.
@@ -101,7 +101,6 @@ int main() {
             }
         }
 
-        // TODO: Prettify this, once the simulator works properly
         cout << "------------ " <<  tracefile.path().filename().string()
              << " ------------";
         cout << "\n INCLUSIVE  | L2 Hits:   " << l2Incl->hits;
@@ -118,7 +117,7 @@ int main() {
         cout << "\n Non-In/Ex  | L2 Misses: " << l2Nine->misses;
         cout << "\n Non-In/Ex  | L3 Hits:   " << l3Nine->hits;
         cout << "\n Non-In/Ex  | L3 Misses: " << l3Nine->misses;
-        cout << "\n";
+        cout << "\n\n";
     }
     return 0;
 }
