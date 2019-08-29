@@ -94,6 +94,7 @@ int main() {
             stringstream line_(line);
             line_ >> type >> address;
             // L1 cache missed, forward it to lower levels
+            address = address >> BLOCK_OFFSET;
             if (type) {
                 inclusive(l2Incl, l3Incl, address);
                 exclusive(l2Excl, l3Excl, address);

@@ -12,7 +12,7 @@ Cache::Cache(type level, int num_sets, int num_ways)
 };
 
 int_t Cache::add_block(int_t address) {
-    int set_num = (int) (address >> BLOCK_OFFSET) % num_sets_;
+    int set_num = (int) (address) % num_sets_;
     // Check if a way is free in the set
     for (auto &set : matrix_.at(set_num)) {
         if (set.present) continue;
@@ -37,7 +37,7 @@ int_t Cache::add_block(int_t address) {
 }
 
 bool Cache::check_hit_or_miss(int_t address) {
-    int set_num = (int) (address >> BLOCK_OFFSET) % num_sets_;
+    int set_num = (int) (address) % num_sets_;
     for (auto &block : matrix_.at(set_num)) {
         if ((block.address == address) && (block.present))
             return true;
@@ -46,7 +46,7 @@ bool Cache::check_hit_or_miss(int_t address) {
 }
 
 void Cache::invalidate_block(int_t address) {
-    int set_num = (int) (address >> BLOCK_OFFSET) % num_sets_;
+    int set_num = (int) (address) % num_sets_;
     for (auto &block : matrix_.at(set_num)) {
         if (block.address != address) continue;
         // Found the block; Invalidate it
@@ -58,7 +58,7 @@ void Cache::invalidate_block(int_t address) {
 }
 
 void Cache::update_on_hit(int_t address) {
-    int set_num = (int) (address >> BLOCK_OFFSET) % num_sets_;
+    int set_num = (int) (address) % num_sets_;
     // Move the block to the top of LRU set
     lru_set_.at(set_num).remove(address);
     lru_set_.at(set_num).push_front(address);
