@@ -22,7 +22,6 @@ CXXFLAGS = -lstdc++fs -std=c++11 -Wall -Wextra
 all: clean process simulate part2
 
 process: $(CSRC) $(TRACES) $(DEPS)
-	mkdir -p $(OBJ)
 	$(CC) -o $@ $<; ./$@
 
 simulate: $(CPPSRC) $(SRC-CA) $(DEPS)
