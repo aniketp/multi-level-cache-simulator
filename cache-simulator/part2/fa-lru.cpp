@@ -1,14 +1,22 @@
+/*
+ * Copyright (c) 2019, Aditya Rohan
+ * Copyright (c) 2019, Aniket Pandey
+ * 
+ * Submitted to:
+ * CS622A: 2019-20 Fall Semester. Assignment 1
+ */
+
 #include <experimental/filesystem>
 #include <iostream>
+#include <fstream>
 #include <sstream>
-
-#include "cache-min.h"
+#include "cache.h"
 
 using namespace std;
 namespace fs = std::experimental::filesystem;
 
-void inclusive(shared_ptr<Cache> l2, shared_ptr<CacheMin> l3, int_t addr,
-                int index) {
+
+void inclusive(shared_ptr<Cache> l2, shared_ptr<Cache> l3, int_t addr) {
     int_t evicted;
     if (l2->check_hit_or_miss(addr)) {
         (l2->hits)++;
@@ -17,10 +25,11 @@ void inclusive(shared_ptr<Cache> l2, shared_ptr<CacheMin> l3, int_t addr,
         (l2->misses)++;
         if (l3->check_hit_or_miss(addr)) {
             (l3->hits)++;
+            l3->update_on_hit(addr);
             l2->add_block(addr);
         } else {
             (l3->misses)++;
-            evicted = l3->add_block(addr, index);
+            evicted = l3->add_block(addr);
             if (evicted && l2->check_hit_or_miss(evicted))
                 l2->invalidate_block(evicted);
             l2->add_block(addr);
@@ -37,25 +46,20 @@ int main() {
             cerr << "Tracefile " << tracefile.path().filename().string()
                  << " could not be opened\n";
 
+        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, L2_SET, L2_WAY);
+        Cache::Ptr l3Incl =
+                make_shared<Cache>(L3Cache, L3_FA_SET, L3_FA_WAY);
+
         // Read through the traces and simlulate above declared caches
         // through the corresponding trace.
         cout << "Processing file " << tracefile.path().filename().string()
              << endl;
-        Cache::Ptr l2Incl = make_shared<Cache>(L2Cache, L2_SET, L2_WAY);
-        CacheMin::Ptr l3Incl = make_shared<CacheMin>(L3Cache, L3_FA_WAY);
-        // Preprocess tracefile; For Belady's MIN algorithm.
-        ifstream prestrm (tracefile.path());
-        int entries = l3Incl->preprocess(prestrm);
-        cout << entries << " entries read.\n";
-        prestrm.close();
-
-        int index = 0;
         while (getline(tracestrm, line)) {
             stringstream line_(line);
             line_ >> type >> address;
             address = address >> BLOCK_OFFSET;
-            // L1 cache missed, forward it to lower levels.
-            if (type) inclusive(l2Incl, l3Incl, address, index++);
+            // L1 cache missed, forward it to lower levels
+            if (type) inclusive(l2Incl, l3Incl, address);
         }
 
         cout << "------------ " <<  tracefile.path().filename().string()

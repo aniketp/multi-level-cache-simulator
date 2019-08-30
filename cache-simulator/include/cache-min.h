@@ -1,10 +1,17 @@
+/*
+ * Copyright (c) 2019, Aditya Rohan
+ * Copyright (c) 2019, Aniket Pandey
+ * 
+ * Submitted to:
+ * CS622A: 2019-20 Fall Semester. Assignment 1
+ */
+
 #ifndef _CACHE_MIN_H_
 #define _CACHE_MIN_H_
 
 #include <fstream>
 #include <map>
 #include "cache.h"
-#define BLOCK_OFFSET   6
 
 class CacheMin {
   public:

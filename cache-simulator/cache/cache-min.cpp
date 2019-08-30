@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2019, Aditya Rohan
+ * Copyright (c) 2019, Aniket Pandey
+ * 
+ * Submitted to:
+ * CS622A: 2019-20 Fall Semester. Assignment 1
+ */
+
 #include <algorithm>
 #include <sstream>
 #include <utility>
@@ -13,7 +21,7 @@ CacheMin::CacheMin(type level, int num_ways)
 
 int_t CacheMin::add_block(int_t address, int index) {
     // Check if a way is free in the set
-    for (auto &set : matrix_.at(0)) {
+    for (auto &set : matrix_.at(0)) { 
         if (set.present) continue;
         // Found an empty slot
         set.present = true;

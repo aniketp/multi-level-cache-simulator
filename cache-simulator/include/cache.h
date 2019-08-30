@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2019, Aditya Rohan
+ * Copyright (c) 2019, Aniket Pandey
+ * 
+ * Submitted to:
+ * CS622A: 2019-20 Fall Semester. Assignment 1
+ */
+
 #ifndef _CACHE_H_
 #define _CACHE_H_
 
