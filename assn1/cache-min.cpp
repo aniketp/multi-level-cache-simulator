@@ -73,6 +73,7 @@ int CacheMin::preprocess(ifstream& tracestrm) {
     while (getline(tracestrm, line)) {
         stringstream line_(line);
         line_ >> type >> address;
+        address = address >> BLOCK_OFFSET;
         if (type) min_set_[address].emplace_back(index++);
     }
     return index;

@@ -53,6 +53,7 @@ int main() {
         while (getline(tracestrm, line)) {
             stringstream line_(line);
             line_ >> type >> address;
+            address = address >> BLOCK_OFFSET;
             // L1 cache missed, forward it to lower levels.
             if (type) inclusive(l2Incl, l3Incl, address, index++);
         }

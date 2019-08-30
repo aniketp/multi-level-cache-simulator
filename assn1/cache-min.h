@@ -4,6 +4,7 @@
 #include <fstream>
 #include <map>
 #include "cache.h"
+#define BLOCK_OFFSET   6
 
 class CacheMin {
   public:
