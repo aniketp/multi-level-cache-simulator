@@ -1,0 +1,30 @@
+% Methodology or Algorithm or Theoretical know-how or steps to run your code/simulations
+% Please delete the below lines and enter details for this assignment/homework
+
+    The commands to compile and run the code are specified in a \texttt{Makefile}. The details are 
+    explained below.
+
+\subsubsection{PART 1}
+\begin{enumerate}
+\item \texttt{make process}: Reads the traces and prepares an input format for simulator. 
+\textbf{Note:} The miss traces MUST be present in a directory named \textit{traces} in the root
+folder.
+
+\item \texttt{make simulate}: Compiles and runs the cache simulator for \textbf{part 1}.\\L2, L3
+cache hits and misses are printed in stdout.
+\end{enumerate}
+
+\textbf{Note:} \texttt{make part1} runs the above two commands together.
+
+\subsubsection{PART 2}
+\begin{enumerate}
+\item \texttt{make fa-lru}: Run the simulator for Fully associative L3 cache with LRU cache
+replacement policy.
+
+\item \texttt{make fa-min}: Run the simulator for Fully associative L3 cache with Belady's MIN
+cache replacement policy.
+\end{enumerate}
+
+\textbf{Note:} \texttt{make part2} runs the above two commands together.
+
+

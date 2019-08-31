@@ -1,0 +1,107 @@
+% Results
+
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+
+\subsection{PART 1: Set Associative, LRU eviction policy}
+\vspace{1cm}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+\textbf{INCLUSIVE} & \multicolumn{2}{|c|}{\textbf{L2}} & \multicolumn{2}{|c|}{\textbf{L3}} \\
+\hline
+ & Hits & Misses & Hits & Misses \\ 
+\hline 
+
+bzip2 &	5259461 &	5398166 &	3951778 &	1446388 \\
+\hline
+gcc &	11574350 &	3036461 &	1663059 &	1373402 \\
+\hline
+gromacs &	3094660 &	336851 &	166320 &	170531 \\
+\hline
+h264ref &	1378895 &	969678 &	627532 &	342146 \\
+\hline
+hmmer &	1766344 &	1743421 &	1352195 &	391226 \\
+\hline
+sphinx3 &	1933098 &	8820349 &	612987 &	8207362 \\
+\hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+\textbf{EXCLUSIVE} & \multicolumn{2}{|c|}{\textbf{L2}} & \multicolumn{2}{|c|}{\textbf{L3}} \\
+\hline
+ & Hits & Misses & Hits & Misses \\ 
+\hline 
+
+bzip2 &	5260051 &	5397576 &	4508355 &	889221 \\
+\hline
+gcc &	11581002 &	3029809 &	1786985 &	1242824 \\
+\hline
+gromacs &	3094787 &	336724 &	177422 &	159302 \\
+\hline
+h264ref &	1382949 &	965624 &	821943 &	143681 \\
+\hline
+hmmer &	1774443 &	1735322 &	1435276 &	300046 \\
+\hline
+sphinx3 &	1938317 &	8815130 &	1594354 &	7220776 \\
+\hline
+
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ |C{2.8cm}|c|c|c|c| } 
+\hline
+\textbf{NINE} & \multicolumn{2}{|c|}{\textbf{L2}} & \multicolumn{2}{|c|}{\textbf{L3}} \\
+\hline
+ & Hits & Misses & Hits & Misses \\ 
+\hline 
+
+bzip2 &	5260051 &	5397576 &	3951730 &	1445846 \\
+\hline
+gcc &	11581002 &	3029809 &	1663561 &	1366248 \\
+\hline
+gromacs &	3094787 &	336724 &	166265 &	170459 \\
+\hline
+h264ref &	1382949 &	965624 &	632041 &	333583 \\
+\hline
+hmmer &	1774443 &	1735322 &	1358978 &	376344 \\
+\hline
+sphinx3 &	1938317 &	8815130 &	609986 &	8205144 \\
+\hline
+
+
+\end{tabular}
+\end{center}
+
+
+\newpage
+\subsection{PART 2: Fully Associative L3 Cache}
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c| }
+\hline
+\textbf{INCLUSIVE} & \multicolumn{3}{|c|}{\textbf{LRU}} & \multicolumn{3}{|c|}{\textbf{Belady MIN}} \\
+\hline
+\textbf{L3} & \textbf{Cold} & \textbf{Capacity} & \textbf{Conflict} & \textbf{Cold} & \textbf{Capacity} & \textbf{Conflict} \\ 
+\hline 
+
+bzip2 &	119753 &	1241648 &	84987 & 119753 &	417083 &	909552 \\
+\hline
+gcc &	773053 &	596871 &	3478 &	773053 &	166236 &	434113 \\
+\hline
+gromacs &	107962 &	61406 &	1163 &	107962 &	35292 &	27277 \\
+\hline
+h264ref &	63703 &	272177 &	6266 & 63703 &	26912 &	251531 \\
+\hline
+hmmer &	75884 &	301140 &	14202 & 75884 &	77563 &	237779 \\
+\hline
+sphinx3 &	122069 &	8265179 &	-179886 & 122069 &	2946511 &	5138782 \\
+\hline
+
+\end{tabular}
+\end{center}
