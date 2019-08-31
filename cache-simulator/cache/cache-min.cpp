@@ -6,6 +6,7 @@
  * CS622A: 2019-20 Fall Semester. Assignment 1
  */
 
+#include <climits>
 #include <algorithm>
 #include <sstream>
 #include <utility>
@@ -26,32 +27,41 @@ int_t CacheMin::add_block(int_t address, int index) {
         // Found an empty slot
         set.present = true;
         set.address = address;
+
+        // Find out the next access time for this block.
+        while (min_set_[address].size() &&
+                (index >= min_set_[address].front())) {
+            min_set_[address].erase(min_set_[address].begin());
+        }
+        // If this block is never accessed in the future, store Infinity.
+        if (min_set_[address].empty())
+            time_set_.insert({ INT_MAX - (infinity++), address });
+        else
+            time_set_.insert({ min_set_[address].front(), address });
+
         return 0;
     }
     // All 'ways' in the set are valid, evict one
-    int max_dist = 0, evict_block = 0;
-    for (int_t i = 0; i < matrix_.at(0).size(); ++i) {
-        auto block = matrix_.at(0)[i];
-        // Make sure there are elements in min_set_[block.address].
-        while (min_set_[block.address].size() &&
-                (index >= min_set_[block.address].front())) {
-            min_set_[block.address].erase(min_set_[block.address].begin());
+    auto evict_itr = time_set_.end();
+    for (auto &block : matrix_.at(0)) {
+        if (block.address != evict_itr->second) continue;
+        block.address = address;
+
+        while (min_set_[address].size() &&
+                (index >= min_set_[address].front())) {
+            min_set_[address].erase(min_set_[address].begin());
         }
-        // If there is no access for this block in the future, return it.
-        if (min_set_[block.address].empty()) {
-            evict_block = i;
-            break;
-        }
-        // All addresses before index have been deleted.
-        if (max_dist < min_set_[block.address].front() - index) {
-            max_dist = min_set_[block.address].front() - index;
-            evict_block = i;
-        }
+        // If this block is never accessed in the future, store Infinity.
+        if (min_set_[address].empty())
+            time_set_.insert({ INT_MAX - (infinity++), address });
+        else
+            time_set_.insert({ min_set_[address].front(), address });
+
     }
     // Replace the farthest block with the current one.
-    cell victim = matrix_.at(0)[evict_block];
-    matrix_.at(0)[evict_block].address = address;
-    return victim.address;
+    int_t victim = evict_itr->second;
+    time_set_.erase(evict_itr->first);
+    return victim;
 }
 
 bool CacheMin::check_hit_or_miss(int_t address) {
@@ -62,6 +72,7 @@ bool CacheMin::check_hit_or_miss(int_t address) {
     return false;
 }
 
+// TODO: FIX THIS
 void CacheMin::invalidate_block(int_t address) {
     for (auto &block : matrix_.at(0)) {
         if (block.address != address) continue;

@@ -42,11 +42,17 @@ class CacheMin {
     // Cache Heirarchy (L1 or L2).
     type level_;
 
+    // Number of Infinity blocks in time_set_.
+    int infinity = 0;
+
     // Number of ways in the cache.
     int num_ways_;
 
     // 2-d matrix, representing the cache org.
     std::vector <std::vector <cell> > matrix_;
+
+    // Store next access time for current blocks
+    std::map <int, int_t > time_set_;
 
     // Instructions for Belady's optimal policy
     std::map <int_t, std::vector <int> > min_set_;
