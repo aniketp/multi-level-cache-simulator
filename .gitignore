@@ -1,6 +1,6 @@
 .vscode
-read_traces
-simulator
+process
+simulate
 fa-lru
 fa-min
 
