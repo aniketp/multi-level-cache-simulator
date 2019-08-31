@@ -2,9 +2,31 @@
     Following are some of the observations on the simulation results.
 \subsection{Part 1}
 \subsubsection{L2 Hits/Misses (Exclusive) == L2 Hits/Misses (NINE)}
+This is observed because at any point in time, the addresses that are present in case of Exclusive 
+policy are same as that of NINE, albeit in different configuration. We can analyze all 
+possibilities to prove this:
+\begin{itemize}
+	\item \textbf{L2 Hit:} Nothing changes here.
+	\item \textbf{L3 Hit:} The block gets added to L2 Cache. Although the block is invalidated from L3 in exclusive case.
+	\item \textbf{L3 Miss:} The block is brought from memory and added to both L2 and L3 cache.
+\end{itemize}
+Hence, in all the cases, if the configuration is same after \textit{kth} steps, it will be same 
+after \textit{(k+1)th} step.
 
 \subsubsection{L3 Misses: Inclusive $ >(\approx)$ NINE $>>$ Exclusive}
+At any given point, L3 cache in case of Exclusive policy will have most absolute space (due to 
+non-similarity of data in L2 and L3). This explains why L3 misses in Exclusive are significantly 
+lesser.\\
+There isn't much difference in L3 misses for Inclusive and NINE cases, although Inclusive is 
+slighly more. This can be attributed to the fact that eviction from L3 also evicts from L2 for 
+Inclusive policy, which is not the case with NINE. So, an access to a block evicted from L3 would
+encounter a hit in L2 for NINE but would unnecessarily miss in both L2, L3 in Inclusive case.
 
 \subsubsection{L2 Misses: Inclusive $>$ Exclusive == NINE}
+This is a serious problem with Inclusive policy, as mentioned in problem statement. If a block 
+recieves constant hits in L2 cache, its rank in the LRU indexing will be quite high. As a result,
+the block will normally never be evicted from L2. But its age in L3 will drop significantly and
+ might even become victim to an eviction. Following the Inclusive policy, it will also have to be
+removed from L2 which would unnecessarily increase L2 misses.
 
 \subsection{Part 2}
