@@ -192,14 +192,25 @@ Processing file hmmer.log_l1misstrace.out
 
 real	78m16.800s
 
-Processing file gromacs.log_l1misstrace.out
-3431511 entries read.
+Processing file gcc.log_l1misstrace.out
+14610811 entries read.
 
------------- gromacs.log_l1misstrace.out ------------
- INCLUSIVE  | L2 Hits:   3109871
- INCLUSIVE  | L2 Misses: 321640
- INCLUSIVE  | L3 Hits:   178386
- INCLUSIVE  | L3 Misses: 143254
+------------ gcc.log_l1misstrace.out ------------
+ INCLUSIVE  | L2 Hits:   11663932
+ INCLUSIVE  | L2 Misses: 2946879
+ INCLUSIVE  | L3 Hits:   2007590
+ INCLUSIVE  | L3 Misses: 939289
 
-real	46m48.278s
+real	421m41.517s
+
+Processing file bzip2.log_l1misstrace.out
+10657627 entries read.
+
+------------ bzip2.log_l1misstrace.out ------------
+ INCLUSIVE  | L2 Hits:   5305674
+ INCLUSIVE  | L2 Misses: 5351953
+ INCLUSIVE  | L3 Hits:   4815117
+ INCLUSIVE  | L3 Misses: 536836
+
+real	500m11.830s
 ```
