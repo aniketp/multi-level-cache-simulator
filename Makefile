@@ -19,7 +19,9 @@ _DEPS = cache.h cache-min.h
 DEPS = $(patsubst %, $(INCLUDE)/%, $(_DEPS))
 CXXFLAGS = -lstdc++fs -std=c++11 -Wall -Wextra
 
-all: clean process simulate part2
+all: clean part1 part2
+
+part1: process simulate
 
 process: $(CSRC) $(TRACES) $(DEPS)
 	$(CC) -o $@ $<; ./$@
@@ -39,7 +41,7 @@ fa-min: $(PART2)/fa-min.cpp $(SRC-CA) $(DEPS)
 
 check: SHELL:=/bin/bash
 check:
-	@echo Warning: Part-2 would take more than 5 hours on a normal \
+	@echo Warning: Part-2 would take more than 8 hours on a normal \
 	machine. Continue? [Y/n]
 	@read line; if [ $$line == "n" ]; then echo TIP: Better to run \
 	build instructions individually; echo; exit 1 ; fi
