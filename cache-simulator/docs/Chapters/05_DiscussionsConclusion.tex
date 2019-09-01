@@ -30,3 +30,7 @@ the block will normally never be evicted from L2. But its age in L3 will drop si
 removed from L2 which would unnecessarily increase L2 misses.
 
 \subsection{Part 2}
+\begin{enumerate}
+	\item  Number of capacity misses for LRU eviction policy are more than that of Belady's policy since Belady is the most optimal solution for block replacement.
+	\item Number of conflict misses for Sphinx3 trace are negative (-179886). For some uncommon cases, the approach of calculating conflict misses from cold and capacity of fully-associative cache can result in a negative number \cite{solihin2015fundamentals}.
+\end{enumerate}
